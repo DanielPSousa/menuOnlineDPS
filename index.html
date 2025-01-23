@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulário para WhatsApp</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="mb-4">Faça seu pedido</h1>
+    <form id="orderForm">
+      <div class="mb-3">
+        <label for="name" class="form-label">Nome:</label>
+        <input type="text" class="form-control" id="name" placeholder="Digite seu nome" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Selecione o prato e a quantidade:</label>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="Arroz, feijão, frango grelhado com brócolis e salada verde" id="menu1">
+          <label class="form-check-label" for="menu1">Arroz, feijão, frango grelhado com brócolis e salada verde</label>
+          <input type="number" class="form-control mt-1" id="qty1" min="0" placeholder="Quantidade">
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="Arroz, feijão, picadinho de carne ao vinho com purê de mandioquinha e salada verde" id="menu2">
+          <label class="form-check-label" for="menu2">Arroz, feijão, picadinho de carne ao vinho com purê de mandioquinha e salada verde</label>
+          <input type="number" class="form-control mt-1" id="qty2" min="0" placeholder="Quantidade">
+        </div>
+        <!-- Adicione os outros pratos aqui seguindo o mesmo formato -->
+      </div>
+
+      <button type="button" class="btn btn-primary" onclick="sendToWhatsApp()">Enviar Pedido</button>
+    </form>
+  </div>
+
+  <script>
+    function sendToWhatsApp() {
+      const name = document.getElementById('name').value;
+      const menus = [
+        { id: 'menu1', qtyId: 'qty1' },
+        { id: 'menu2', qtyId: 'qty2' }
+        // Adicione mais pratos aqui conforme necessário
+      ];
+
+      let orderDetails = '';
+
+      menus.forEach(menu => {
+        const checkbox = document.getElementById(menu.id);
+        const quantity = document.getElementById(menu.qtyId).value;
+
+        if (checkbox.checked && quantity > 0) {
+          orderDetails += `\n- ${checkbox.value} (Quantidade: ${quantity})`;
+        }
+      });
+
+      if (!name || !orderDetails) {
+        alert('Por favor, preencha seu nome e selecione pelo menos um prato com a quantidade.');
+        return;
+      }
+
+      const message = `*Pedido Realizado*%0A%0A*Nome:* ${name}%0A*Pedido:* ${orderDetails}`;
+      const whatsappUrl = `https://wa.me/21981944866?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }
+  </script>
+</body>
+</html>
